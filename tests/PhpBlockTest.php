@@ -154,4 +154,26 @@ class PhpBlockTest extends TestCase
             );
         }
     }
+
+    public function testInlinePhpDirective(): void
+    {
+        /**
+         * Multiple statements in inline @php directives
+         * are not supported to maintain compatibility
+         * with Laravel Blade.
+         */
+        $template = '@php($name = "Maria") {{ $name }}';
+
+        $this->assertSame(
+            'Maria',
+            $this->removeIndentation($this->renderBlade($template))
+        );
+
+        $templateWithoutSpace = '@php($name = "No spaces"){{ $name }}';
+
+        $this->assertSame(
+            'No spaces',
+            $this->removeIndentation($this->renderBlade($templateWithoutSpace))
+        );
+    }
 }
