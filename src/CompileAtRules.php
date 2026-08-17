@@ -170,7 +170,7 @@ class CompileAtRules
 
     protected function compilePhp(string $expression): string
     {
-        return "<?php ";
+        return strlen($expression) === 0 ? "<?php " : "<?php $expression ?>";
     }
 
     protected function compileEndphp(string $expression): string
