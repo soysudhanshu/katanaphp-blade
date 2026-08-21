@@ -68,9 +68,9 @@ trait VerifiesOutputTrait
             }
         }
 
-        is_dir($directory) && rmdir($directory);
+        @rmdir($directory);
     }
-    
+
     protected function cleanUpGeneratedFiles(): void
     {
         $files = array_merge(
