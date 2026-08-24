@@ -20,6 +20,17 @@ class UseDirectiveTest extends TestCase
         );
     }
 
+    public function testWithLeadingSlash(): void
+    {
+        $template = "@use(\Symfony\Component\VarDumper\VarDumper)\n" .
+            '{{ VarDumper::class }}';
+
+        $this->assertSame(
+            'Symfony\Component\VarDumper\VarDumper',
+            $this->removeIndentation($this->renderBlade($template))
+        );
+    }
+
     public function testWithValueAsString(): void
     {
         $template = "@use('Symfony\Component\VarDumper\VarDumper')\n" .

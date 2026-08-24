@@ -483,24 +483,15 @@ class CompileAtRules
 
     public function compileUse(string $expression): string
     {
-        $regex = <<<'REGEX'
-        /^\(
-            (?P<quotes>'|"|)
-                (?'class'[\w\\\s]+(?:{[\w\s\,]+}|))
-            (?&quotes)
-            (?:(((\,\s+)|)
-                (?&quotes)(?'alias'\w+)(?&quotes))
-            |)
-        \)$/x
-        REGEX;
-        $matches = [];
-        $matched = preg_match($regex, $expression, $matches);
+        $expression = $this->trimParenthesis($expression);
+        $expression = str_replace('"', "", $expression);
+        $expression = str_replace('\'', "", $expression);
 
-        if (!empty($matches['alias'])) {
-            return sprintf("<?php use %s as %s; ?>", $matches['class'], $matches['alias']);
+        if (!str_contains($expression, "{",) && str_contains($expression, ',')) {
+            $expression = str_replace(',', " as ", $expression);
         }
 
-        return sprintf("<?php use %s; ?>", $matches['class']);
+        return "<?php use {$expression}; ?>";
     }
 
     protected function trimParenthesis(string $string): string
@@ -511,6 +502,7 @@ class CompileAtRules
 
         return $string;
     }
+
     public function compileSlot(string $expression): string
     {
         /**
