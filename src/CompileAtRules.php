@@ -481,6 +481,36 @@ class CompileAtRules
         return $output;
     }
 
+    public function compileUse(string $expression): string
+    {
+        $regex = <<<'REGEX'
+        /^\(
+            (?P<quotes>'|"|)
+                (?'class'[\w\\\s]+(?:{[\w\s\,]+}|))
+            (?&quotes)
+            (?:(((\,\s+)|)
+                (?&quotes)(?'alias'\w+)(?&quotes))
+            |)
+        \)$/x
+        REGEX;
+        $matches = [];
+        $matched = preg_match($regex, $expression, $matches);
+
+        if (!empty($matches['alias'])) {
+            return sprintf("<?php use %s as %s; ?>", $matches['class'], $matches['alias']);
+        }
+
+        return sprintf("<?php use %s; ?>", $matches['class']);
+    }
+
+    protected function trimParenthesis(string $string): string
+    {
+        if (str_starts_with($string, '(') && str_ends_with($string, ')')) {
+            return substr($string, 1, strlen($string) - 2);
+        }
+
+        return $string;
+    }
     public function compileSlot(string $expression): string
     {
         /**

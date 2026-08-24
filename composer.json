@@ -15,7 +15,10 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "./tests/Constants.php"
+        ]
     },
     "require": {
         "php": ">=8.0"
