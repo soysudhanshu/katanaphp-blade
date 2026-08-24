@@ -481,6 +481,28 @@ class CompileAtRules
         return $output;
     }
 
+    public function compileUse(string $expression): string
+    {
+        $expression = $this->trimParenthesis($expression);
+        $expression = str_replace('"', "", $expression);
+        $expression = str_replace('\'', "", $expression);
+
+        if (!str_contains($expression, "{",) && str_contains($expression, ',')) {
+            $expression = str_replace(',', " as ", $expression);
+        }
+
+        return "<?php use {$expression}; ?>";
+    }
+
+    protected function trimParenthesis(string $string): string
+    {
+        if (str_starts_with($string, '(') && str_ends_with($string, ')')) {
+            return substr($string, 1, strlen($string) - 2);
+        }
+
+        return $string;
+    }
+
     public function compileSlot(string $expression): string
     {
         /**
