@@ -484,11 +484,15 @@ class CompileAtRules
     public function compileUse(string $expression): string
     {
         $expression = $this->trimParenthesis($expression);
-        $expression = str_replace('"', "", $expression);
-        $expression = str_replace('\'', "", $expression);
 
-        if (!str_contains($expression, "{",) && str_contains($expression, ',')) {
-            $expression = str_replace(',', " as ", $expression);
+        if (str_contains($expression, "{")) {
+            $expression = trim($expression, "\ \'\"");
+        } else {
+            $expression = array_map(
+                fn($part) => trim($part, "\ \'\""),
+                explode(",", $expression)
+            );
+            $expression = implode(" as ", $expression);
         }
 
         return "<?php use {$expression}; ?>";
