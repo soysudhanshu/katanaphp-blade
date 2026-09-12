@@ -13,4 +13,5 @@ class Messages
     public const ERROR_MISSING_DEFAULT_VIEW_FINDER = 'Missing default views, use Config::addViewPath';
     public const ERROR_AUTH_CALLBACK_REQUIRED = 'Auth callback is required, use Config::setAuthCallback';
     public const ERROR_MULTIPLE_PATH_FOR_NAMESPACE_NOT_ALLOWED = "Path for the component namespace %s already registered, multiple paths are not allowed";
+    public const ERROR_INVALID_DIRECTIVE_NAME = "Invalid directive name `%s` only alphabets, numbers and underscores should be used";
 }
